@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   <style>
+      *{
+         padding: 0;
+         margin: 0;
+      }
+      .sidebar {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-color: rgba(92, 184, 92, 0.3);
+    width: 0;
+    transition: width 0.5s;
+    z-index: 100000000;
+}
+
+.sidebar:hover {
+    width: 200px;
+    max-width: 200px;
+    z-index: 100000001; /* Set a higher z-index when expanded */
+}
+
+.content-container {
+    transition: margin-left 0.5s;
+}
+
+/* Center the content within the expanded sidebar */
+.sidebar + .content-container .container {
+    margin: 0 auto;
+}
+
+.sidebar + .content-container .row {
+    justify-content: center;
+}
+
+.sidebar + .content-container .col-md-12 {
+    text-align: center;
+}
+
+.sidebar + .content-container .well {
+    text-align: center;
+}
+
+.sidebar + .content-container .table {
+    margin-top: 50px; /* Adjust the top margin to create space for the expanded sidebar */
+}
+   </style>
+     
+   <title>Document</title>
+</head>
+<body>
+   <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+         <ul class="nav flex-column">
+            <li class="nav-item">
+               <a class="nav-link active" href="{{url_for('dashboard')}}" style="color: rgb(0, 0, 0);">
+                  <i class="fa-solid fa-house"></i>
+                  Dashboard
+                 
+               </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('admin_index')}}" style="color:  rgb(0, 0, 0);">
+               <i class="fa-solid fa-list-check"></i>
+                 Manage Costumers
+              </a>
+           </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{{url_for('admin_member_list')}}" style="color:  rgb(0, 0, 0);">
+                  <i class="fa-solid fa-user"></i>
+                  Member List
+               </a>
+            </li>
+            <li class="nav-item nav-item-submenu">
+               <a class="nav-link" href="{{url_for('sales')}}" style="color: rgb(0, 0, 0);">
+                  <i class="fa-solid fa-shop"></i>
+                  Sales
+               </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{{url_for('equipments')}}" style="color:  rgb(0, 0, 0);">
+                  <i class="fa-solid fa-dumbbell"></i>
+                  Equipments
+               </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('accounts')}}" style="color:  rgb(0, 0, 0);">
+                  <i class="fa-solid fa-user"></i>
+                 Accounts
+              </a>
+           </li>
+  
+         </ul>
+      </div>
+   </nav>
+   {% block body %}
+   <div class="container">
+      <div class="well text-center">
+         <h1>GYM COSTUMER MANAGEMENT</h1>
+      </div>
+   
+   <div class="container"  style="height:395px;">
+      <div class="row">
+         <div class="col md-12">
+            <h2>Costumer list <button type="button" 
+               class="btn btn-success pull-right"
+               data-toggle="modal"
+                data-target="#mymodal"
+               >
+            Add Costumer
+            </button></h2>
+
+   
+
+
+
+
+
+   <table class="table table-striped">
+
+
+      <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Total Payment</th>
+    <th>Costumer Type</th>
+    <th>Date</th>
+
+
+</tr>
+
+
+
+
+
+      {% for row in costumer %}
+      <tr>
+          <td>{{row.0}}</td>
+          <td>{{row.1}}</td>
+          <td>{{row.2}}</td>
+          <td>{{row.3}}</td>
+          <td>{{row.4}}</td> 
+          <td>
+
+
+     <a href="/update/{{row.0}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+      <a href="/delete/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure For Delete?')" >Delete</a>
+
+          </td>
+
+      </tr>
+
+      <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+
+
+<div class="modal-dialog">
+
+
+<div class="modal-content">
+
+
+<div class="modal-header">
+
+
+  <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+  <h4 class="modal-title">Update Information</h4>
+
+
+</div>
+
+
+<div class="modal-body">
+
+
+  <form action="{{ url_for('update') }}" method="POST">
+
+
+     <div class="form-group">
+
+
+        <label>Name:</label>
+         <input type="hidden"  name="id" value="{{row.0}}">
+
+        <input type="text" class="form-control" name="name" value="{{row.1}}">
+
+
+     </div>
+
+
+
+     <div class="form-group">
+
+
+        <label>Monthly Payment:</label>
+
+        <input type="text" class="form-control" name="monthly_payment" value="{{row.2}}">
+
+
+     </div>
+
+
+     <div class="form-group">
+
+
+        <label>Costumer Type:</label>
+
+        <input type="text" class="form-control" name="costumer_type" value="{{row.3}}"  readonly>
+
+        readonly
+     </div>
+
+
+     <div class="form-group">
+
+
+        <button class="btn btn-primary" type="submit">Update</button>
+
+
+     </div>
+
+
+  </form>
+
+
+</div>
+
+
+<div class="modal-footer">
+
+
+  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+      {% endfor  %}
+   </tbody>
+    
+      </tbody>
+
+
+  </table>
+
+         </div>
+      </div>
+
+      
+
+
+
+
+
+
+
+      <div id="mymodal" class="modal fade" role="dialog">
+
+
+         <div class="modal-dialog">
+      
+      
+            <div class="modal-content">
+      
+      
+               <div class="modal-header">
+      
+      
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+      
+      
+                  <h4 class="modal-title">Update Information</h4>
+      
+      
+               </div>
+      
+      
+               <div class="modal-body">
+      
+      
+                  <form action="{{url_for('insert')}}" method="POST">
+      
+      
+                     <div class="form-group">
+      
+      
+                        <label>Name:</label>
+                        
+      
+                        <input type="text" class="form-control" name="name" required="1">
+      
+      
+                     </div>
+      
+      
+      
+                     <div class="form-group">
+                        <label>Months of Mebership:</label>
+                        <input type="text" class="form-control" name="monthly_payment" required="1" pattern="[0-9]+" title="Please enter a valid integer">
+                    </div>
+      
+      
+                     <div class="form-group">
+      
+      
+                        <div class="form-group">
+                           <label>Costumer Type:</label>
+                           <input type="text" class="form-control" name="costumer_type" value="member" readonly>
+                       </div>
+      
+      
+                     </div>
+                     <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" class="form-control" name="username" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" name="password" required>
+                     </div>
+                     <div class="form-group">
+      
+      
+                        <button class="btn btn-primary" type="submit">Insert Data</button>
+      
+      
+                     </div>
+      
+      
+                  </form>
+      
+      
+               </div>
+      
+      
+               <div class="modal-footer">
+      
+      
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      
+      
+               </div>
+      
+      
+            </div>
+      
+      
+         </div>
+      
+      
+      </div>
+
+   </div>
+   
+</div>
+ <!-- Footer -->
+ <footer class="footer mt-auto py-3 bg-light" style="border: rgb(197, 195, 195) solid 1px;">
+   <div class="container">
+       <span class="text-muted">Gym Dashboard &copy; 2024</span>
+   </div>
+</footer>
+</div>
+
+   {% endblock %}
+
+
+
+
+  
+</body>
+
+<script src="{{url_for('static', filename='js/jquery-3.2.1.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+

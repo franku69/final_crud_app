@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+.sidebar {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-color: rgba(92, 184, 92, 0.3);
+    width: 0;
+    transition: width 0.5s;
+    z-index: 100000000;
+}
+
+.sidebar:hover {
+    width: 200px;
+    max-width: 200px;
+    z-index: 100000001; /* Set a higher z-index when expanded */
+}
+
+.content-container {
+    transition: margin-left 0.5s;
+}
+
+/* Center the content within the expanded sidebar */
+.sidebar + .content-container .container {
+    margin: 0 auto;
+}
+
+.sidebar + .content-container .row {
+    justify-content: center;
+}
+
+.sidebar + .content-container .col-md-12 {
+    text-align: center;
+}
+
+.sidebar + .content-container .well {
+    text-align: center;
+}
+
+.sidebar + .content-container .table {
+    margin-top: 50px; /* Adjust the top margin to create space for the expanded sidebar */
+}
+      </style>
+    <title>Dashboard</title>
+</head>
+
+<body>
+   
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{url_for('dashboard')}}" style="color: rgb(0, 0, 0);">
+                        <i class="fa-solid fa-house"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('admin_index')}}" style="color: rgb(0, 0, 0);">
+                        <i class="fa-solid fa-list-check"></i>
+                        Manage Costumers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('admin_member_list')}}" style="color: rgb(0, 0, 0);">
+                        <i class="fa-solid fa-user"></i>
+                        Member List
+                    </a>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a class="nav-link" href="{{url_for('sales')}}" style="color: rgb(0, 0, 0);">
+                        <i class="fa-solid fa-shop"></i>
+                        Sales
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('equipments')}}" style="color: rgb(0, 0, 0);">
+                        <i class="fa-solid fa-dumbbell"></i>
+                        Equipments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('accounts')}}" style="color: rgb(0, 0, 0);">
+                        <i class="fa-solid fa-user"></i>
+                        Accounts
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+  
+    <div class="content-container">
+        {% block content %}
+        <div class="well text-center" style="height: 50%;">
+            <h2>GYM MANAGEMENT SYSTEM</h2>
+        </div>
+        <div class="container">
+            
+            {%with messages = get_flashed_messages()%}
+
+            {%if messages%}
+         
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissable" role="alert">
+               <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               {{message}}
+            </div>
+             
+           
+            {%endfor%}
+            {%endif%}
+            {%endwith%}
+            <img src="static/visitor.png" class="card-img-top" alt="Visitor" width="100" height="100" style="margin-right: 18rem;">
+            <img src="static/visitor.png" class="card-img-top" alt="Visitor" width="100" height="100" style="margin-right: 18rem;">
+            <img src="static/costumer.png" class="card-img-top" alt="Visitor" width="100" height="100" style="margin-right: 13rem;">
+            <img src="static/sales.png" class="card-img-top" alt="Visitor" width="100" height="100" style="margin-right: 8rem;">
+            <img src="static/category.png" class="card-img-top" alt="Visitor" width="100" height="100">
+            <div class="container">
+                <div class="row">
+                    <div class="col md-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th> <i class="fa-solid fa-user"></i> Number of Visitors</th>
+                                    <th> <i class="fa-solid fa-user"></i> Number of Members</th>
+                                    <th> <i class="fa-solid fa-user"></i> Number of Costumers</th>
+                                    <th><i class="fa-solid fa-list-check"></i> Sales</th>
+                                    <th><i class="fa-solid fa-list-check"></i> Categories</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            
+                                <tr style="height: 288px; background: rgb(226, 222, 222);"> <!-- Adjust the height value as needed -->
+                                    <td><b>{{ visitors_count }}</b></td>
+                                    <td><b>{{ members_count }}</b></td>
+                                    <td><b>{{ costumers_count }}</b></td>
+                                    <td><b>{{ sales_count }}</b></td>
+                                    <td><b>7</b></td>
+                                </tr>
+                        
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+  
+        </div>
+                    <!-- Footer -->
+                    <footer class="footer mt-auto py-3 bg-light" style="border: rgb(197, 195, 195) solid 1px;">
+                        <div class="container">
+                            <span class="text-muted">Gym Dashboard &copy; 2024</span>
+                        </div>
+                    </footer>
+        </div>
+      
+        {% endblock %}
+    
+        <img id="logoutIcon" src="static/logout.jpg" class="card-img-top" alt="Visitor" width="20" height="20" style="position: absolute; top: 30px; right: 20px; cursor: pointer;">
+        <div class="text-center">
+      <a id="logoutButton" href="{{ url_for('logout') }}" class="btn btn-danger mt-3" style="position: absolute; top: 50px; right: 20px;display: none;">Logout</a>
+   </div>
+        <script src="{{url_for('static', filename='js/jquery-3.2.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            // Hide the logout button initially
+            $('#logoutButton').hide();
+
+            // Show the logout button on image click
+            $('#logoutIcon').click(function () {
+                $('#logoutButton').toggle();
+            });
+        });
+    </script>
+</body>
+
+</html>

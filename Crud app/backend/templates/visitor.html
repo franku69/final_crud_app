@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            height: 500px;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            background-color: rgba(92, 184, 92, 0.3);
+            width: 0;
+            max-width: 200px;
+            transition: width 0.5s;
+        }
+
+        .sidebar:hover {
+            width: 200px;
+            max-width: 200px;
+        }
+
+        .content-container {
+            width: 70%; /* Adjust the width as needed */
+            transition: width 0.5s;
+        }
+
+        .sidebar:hover + .content-container {
+            margin-left: 200px;
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .product-card {
+            width: 100%;
+            max-width: 300px; /* Adjust the max-width as needed */
+            margin: 10px;
+        }
+
+        #cart {
+            position: fixed;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            width: 25%; /* Adjust the width as needed */
+            top: 10rem;
+            right: 0;
+        }
+        
+        #cart_for_visitor{
+            position: fixed;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            width: 25%; /* Adjust the width as needed */
+            top: 50x;
+            right: 0;
+        }
+        #cart h3 {
+            text-align: center;
+        }
+
+        #purchase-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .footer {
+            width: 100%;
+        }
+     /* Add the following styles to make the sidebar sticky */
+        /* Add the following styles to make the sidebar hide and show on hover */
+        .sidebar {
+            position:fixed;
+            top: 0;
+            height: 100%;
+            overflow-y: hidden;
+            overflow-x: hidden;/* Hide horizontal scrollbar */
+            background-color: rgba(92, 184, 92, 0.3);
+            width: 0;
+            max-width: 200px; /* Initially hide the sidebar */
+            transition: width 0.5s; /* Add a transition effect */
+        }
+
+        .sidebar:hover {
+         width: 200px;
+         max-width: 200px; /* Show the sidebar on hover */
+        }
+
+        /* Submenu styles */
+       
+        .content-container {
+    margin-left: 0; /* Initially, no margin when sidebar is hidden */
+    transition: margin-left 0.5s; /* Add a transition effect for margin */
+}
+
+.sidebar:hover + .content-container {
+    margin-left: 200px; /* Apply margin when sidebar is shown on hover */
+}
+   </style>
+     
+   <title>Document</title>
+</head>
+<body>
+        
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+           <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="{{ url_for('intro') }}" style="color: rgb(0, 0, 0);">
+                   <i class="fa-solid fa-user"></i>
+                   login
+                  
+                </a>
+             </li>
+              <li class="nav-item">
+                 <a class="nav-link active" href="{{ url_for('visitor') }}" style="color: rgb(0, 0, 0);">
+                    <i class="fa-solid fa-user"></i>
+                    
+                    visitor
+                   
+                 </a>
+              </li>
+           </ul>
+        </div>
+     </nav>
+
+
+    
+    <!-- Shopping Cart -->
+    <div id="cart">
+        <h3>Counter</h3>
+        <ul id="cart-items"></ul>
+        <p id="total">Total: ₱0.00</p>
+        <button id="purchase-btn" onclick="purchaseItems()">Pay</button>
+    </div>
+    <div id="cart_for_visitor">
+        <h3>Shop</h3>
+        <ul id="cart-items"></ul>
+        <p id="total">for vistors</p>
+    </div>
+    
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="sidebar"></div>
+        <div class="content-container">
+            <div class="product-container">
+                <!-- Add more product cards as needed -->
+                <div class="card product-card">
+                    <img src="static/bottlez.jpg" class="card-img-top" alt="Visitor" width="100" height="100">
+                    <div class="card-body">
+                        <h5 class="card-title">water bottle</h5>
+                        <p class="card-text">12 oz</p>
+                        <p class="card-text">₱10.00</p>
+                        <a href="#" class="btn btn-primary" onclick="addToCart('water bottle', 10.00)">Add to Counter</a>
+                    </div>
+                </div>
+                <div class="card product-card">
+                    <img src="static/coke.png" class="card-img-top" alt="Visitor" width="100" height="100">
+                    <div class="card-body">
+                        <h5 class="card-title">coke bottle</h5>
+                        <p class="card-text">12 oz</p>
+                        <p class="card-text">₱20.00</p>
+                        <a href="#" class="btn btn-primary" onclick="addToCart('coke bottle', 20.00)">Add to Counter</a>
+                    </div>
+                </div>
+                <div class="card product-card">
+                    <img src="static/gatorade.jpg" class="card-img-top" alt="Visitor" width="100" height="100">
+                    <div class="card-body">
+                        <h5 class="card-title">gatorade bottle</h5>
+                        <p class="card-text">12 oz</p>
+                        <p class="card-text">₱50.00</p>
+                        <a href="#" class="btn btn-primary" onclick="addToCart('gatorade bottle', 50.00)">Add to Counter</a>
+                    </div>
+                </div>
+                <div class="card product-card">
+                    <img src="static/c2.jpg" class="card-img-top" alt="Visitor" width="100" height="100">
+                    <div class="card-body">
+                        <h5 class="card-title">c2 bottle</h5>
+                        <p class="card-text">12 oz</p>
+                        <p class="card-text">₱20.00</p>
+                        <a href="#" class="btn btn-primary" onclick="addToCart('c2 bottle', 20.00)">Add to Counter</a>
+                    </div>
+                </div>
+                <div class="card product-card">
+                    <img src="static/sprite.png" class="card-img-top" alt="Visitor" width="100" height="100">
+                    <div class="card-body">
+                        <h5 class="card-title">sprite bottle</h5>
+                        <p class="card-text">12 oz</p>
+                        <p class="card-text">₱20.00</p>
+                        <a href="#" class="btn btn-primary" onclick="addToCart('sprite bottle', 20.00)">Add to Counter</a>
+                    </div>
+                </div>
+                <div class="card product-card">
+                    <img src="static/mountain_dew.jpg" class="card-img-top" alt="Visitor" width="100" height="100">
+                    <div class="card-body">
+                        <h5 class="card-title">mountain dew bottle</h5>
+                        <p class="card-text">12 oz</p>
+                        <p class="card-text">₱20.00</p>
+                        <a href="#" class="btn btn-primary" onclick="addToCart('mountain dew bottle', 20.00)">Add to Counter</a>
+                    </div>
+                </div>
+                <div class="card product-card">
+                    <img src="static/royal.jpg" class="card-img-top" alt="Visitor" width="100" height="100">
+                    <div class="card-body">
+                        <h5 class="card-title">royal bottle</h5>
+                        <p class="card-text">12 oz</p>
+                        <p class="card-text">₱20.00</p>
+                        <a href="#" class="btn btn-primary" onclick="addToCart('royal bottle', 20.00)">Add to Counter</a>
+                    </div>
+                </div>
+                <div class="card product-card">
+                    <img src="static/yakult.jpg" class="card-img-top" alt="Visitor" width="100" height="100">
+                    <div class="card-body">
+                        <h5 class="card-title">yakult bottle</h5>
+                        <p class="card-text">12 oz</p>
+                        <p class="card-text">₱20.00</p>
+                        <a href="#" class="btn btn-primary" onclick="addToCart('yakult bottle', 20.00)">Add to Counter</a>
+                    </div>
+                </div>
+                <div class="card product-card">
+                    <img src="static/treadmill.jpg" class="card-img-top" alt="Visitor 2" width="100" height="100">
+                    <div class="card-body">
+                        <h5 class="card-title">treadmill</h5>
+                        <p class="card-text">use for 1 hour</p>
+                        <p class="card-text">₱100.00</p>
+                        <a href="#" class="btn btn-primary" onclick="addToCart('use treadmill', 100.00)">Add to Counter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">Your Shop &copy; 2024</span>
+        </div>
+    </footer>
+
+    <script src="{{url_for('static', filename='js/jquery-3.2.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+
+    <script>
+        var cartItems = [];
+        var totalAmount = 0;
+
+        function addToCart(productName, price) {
+            cartItems.push({ name: productName, price: price });
+            updateCart();
+        }
+
+        function updateCart() {
+            var cartList = document.getElementById('cart-items');
+            var totalElement = document.getElementById('total');
+            var cartHtml = '';
+
+            totalAmount = 0;
+
+            cartItems.forEach(function (item) {
+                cartHtml += '<li>' + item.name + ' - ₱' + item.price.toFixed(2) + '</li>';
+                totalAmount += item.price;
+            });
+
+            cartList.innerHTML = cartHtml;
+            totalElement.innerHTML = 'Total: ₱' + totalAmount.toFixed(2);
+        }
+
+        function purchaseItems() {
+            // Make an AJAX request to the server to store the purchase details
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/record_purchase1', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Handle the response, if needed
+                    alert('Items purchased! Total amount: ₱' + totalAmount.toFixed(2));
+                    cartItems = [];
+                    updateCart();
+                }
+            };
+
+            var data = JSON.stringify({ totalAmount: totalAmount });
+            xhr.send(data);
+        }
+    </script>
+</body>
+
+</html>

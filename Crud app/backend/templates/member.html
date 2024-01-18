@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Home</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+</head>
+
+<body>
+<div class="cont">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">FDS GYM PROJECT</a>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto" style="list-style: none;background: rgb(136, 133, 133); ">
+                
+                <li class="nav-item active" style="margin-right: 15px; margin-top: 15px;">
+                    <a class="nav-link" href="{{ url_for('contact') }}" style="color: rgb(253, 254, 255);">Contact</a>
+                </li>
+                <li class="nav-item active" style="margin-right: 15px; margin-top: 15px;">
+                    <a class="nav-link" href="{{url_for('member_shop')}}" style="color: rgb(253, 254, 255);">Shop</a>
+                </li>
+                <li class="nav-item active" style="margin-right: 15px; margin-top: 15px;">
+                    <a class="nav-link" href="{{url_for('member_equipment')}}" style="color: rgb(253, 254, 255);">Equipments</a>
+                </li>
+                <li class="nav-item active">
+                    <a href="/logout" class="btn btn-danger ml-2">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</div>
+<div class="container mt-5">
+    <div class="well text-center">
+        <h1>Welcome, Member!</h1>
+        <p>This is your member dashboard.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2>Your Profile</h2>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Costumer Type:</strong> {{ costumer_name }}</li>
+                    <li class="list-group-item"><strong>Total Payment:</strong> {{ costumer_monthly_payment }}</li>
+                    <li class="list-group-item"><strong>Name:</strong> {{ costumer_costumer_type }}</li>
+                    <li class="list-group-item"><strong>Expiration Date:</strong> {{ membership_plan_mem_enddate }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+</body>
+</html>
